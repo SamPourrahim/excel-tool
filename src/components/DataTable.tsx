@@ -1,5 +1,5 @@
 import React from 'react';
-import { TableRow } from '../types';
+import type { TableRow } from '../types';
 
 interface DataTableProps {
   data: TableRow[];

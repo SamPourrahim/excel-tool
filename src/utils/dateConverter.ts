@@ -1,4 +1,5 @@
 
+
 /**
  * Converts a Jalali (Shamsi) date to a Gregorian date.
  * This is a standard algorithm for date conversion.
@@ -9,7 +10,6 @@
  */
 const jalaliToGregorian = (j_y: number, j_m: number, j_d: number): Date => {
   const breaks = [-61, 9, 38, 199, 426, 686, 756, 818, 1111, 1181, 1210, 1635, 2060, 2097, 2192, 2262, 2324, 2394, 2456, 3178];
-  const breaksLength = breaks.length;
   const g_days_in_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   const j_days_in_month = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29];
 

@@ -1,4 +1,4 @@
-import { DatePair, ComparePair } from "../types";
+import type { DatePair, ComparePair } from "../types";
 
 type Mode = 'calculate' | 'merge' | 'group' | 'compare';
 
@@ -35,8 +35,8 @@ const API_DISABLED_MESSAGE = `# Python code generation is disabled in this versi
 `;
 
 export const generatePythonCode = async (
-  mode: Mode,
-  params: CalculateParams | MergeParams | GroupParams | CompareParams
+  _mode: Mode,
+  _params: CalculateParams | MergeParams | GroupParams | CompareParams
 ): Promise<string> => {
   // This function is now a placeholder and does not call any external API.
   // It immediately returns a static message.
