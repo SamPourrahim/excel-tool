@@ -1,0 +1,5 @@
+{
+  "name": "Excel Shamsi Date & Merge Tool",
+  "description": "An advanced tool to upload Excel files, calculate differences between multiple Shamsi (Jalali) date column pairs, merge two files based on a key column, download the results, and generate equivalent Python code using the Gemini API.",
+  "requestFramePermissions": []
+}
