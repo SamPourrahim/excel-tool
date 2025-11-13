@@ -1,5 +1,7 @@
+
 import React, { useState, useCallback } from 'react';
 import * as XLSX from 'xlsx';
+import Papa from 'papaparse';
 import type { TableRow, DatePair, ComparePair } from './types';
 import { parseJalaliDate, parseGregorianDate } from './utils/dateConverter';
 import { generatePythonCode } from './services/geminiService';
@@ -96,20 +98,30 @@ const App: React.FC = () => {
     const reader = new FileReader();
     reader.onload = (event) => {
       try {
-        const arrayBuffer = event.target?.result;
-        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
-        const jsonData = XLSX.utils.sheet_to_json<TableRow>(worksheet);
+        const fileContent = event.target?.result;
+        let jsonData: TableRow[] = [];
+
+        if (file.name.toLowerCase().endsWith('.csv')) {
+            const result = Papa.parse(fileContent as string, {
+                header: true,
+                skipEmptyLines: true,
+            });
+            jsonData = result.data as TableRow[];
+        } else {
+            const workbook = XLSX.read(fileContent, { type: 'array' });
+            const sheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[sheetName];
+            jsonData = XLSX.utils.sheet_to_json<TableRow>(worksheet);
+        }
         
         if (jsonData.length > 0) {
           setDataState(jsonData);
           setHeadersState(Object.keys(jsonData[0]));
         } else {
-          setError('فایل اکسل خالی است یا فرمت آن پشتیبانی نمی‌شود.');
+          setError('فایل خالی است یا فرمت آن پشتیبانی نمی‌شود.');
         }
       } catch (e) {
-        setError('خطا در پردازش فایل. لطفاً از یک فایل اکسل معتبر استفاده کنید.');
+        setError('خطا در پردازش فایل. لطفاً از یک فایل معتبر استفاده کنید.');
         console.error(e);
       } finally {
         setIsLoading(false);
@@ -119,7 +131,12 @@ const App: React.FC = () => {
       setError('خطا در خواندن فایل.');
       setIsLoading(false);
     }
-    reader.readAsArrayBuffer(file);
+    
+    if (file.name.toLowerCase().endsWith('.csv')) {
+        reader.readAsText(file);
+    } else {
+        reader.readAsArrayBuffer(file);
+    }
   };
 
   const addDatePair = () => { setDatePairs([...datePairs, { id: nextId, start: '', end: '', startType: 'jalali', endType: 'jalali' }]); setNextId(nextId + 1); };
@@ -561,7 +578,7 @@ const App: React.FC = () => {
              )}
              {isLoading && (
                 <div className="flex items-center justify-center bg-white p-6 rounded-xl shadow-lg h-full min-h-[300px]">
-                    <svg className="animate-spin h-8 w-8 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="o 0 24 24">
+                    <svg className="animate-spin h-8 w-8 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>

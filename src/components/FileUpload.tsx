@@ -36,14 +36,14 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onFileSelect, currentFil
         ref={fileInputRef}
         onChange={handleFileChange}
         className="hidden"
-        accept=".xlsx, .xls"
+        accept=".xlsx, .xls, .csv"
       />
       <div className="flex flex-col items-center justify-center">
         <div className="bg-indigo-100 text-indigo-600 rounded-full p-2 mb-2">
           <UploadIcon />
         </div>
         <p className="font-semibold text-slate-700 text-sm">{title || "فایل خود را انتخاب کنید"}</p>
-        <p className="text-xs text-slate-500 mt-1">پشتیبانی از XLSX, XLS</p>
+        <p className="text-xs text-slate-500 mt-1">پشتیبانی از XLSX, XLS, CSV</p>
         {currentFile && (
           <p className="text-xs text-green-600 mt-2 font-medium bg-green-100 px-2 py-1 rounded-full">
             {currentFile.name}
